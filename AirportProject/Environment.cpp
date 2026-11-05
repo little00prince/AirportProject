@@ -2,9 +2,9 @@
 #include <utility>
 
 Environment::Environment(double windSpeed, std::string windDirection,
-                         double visibility, double pressure)
+    double visibility, double pressure)
     : windSpeed_(windSpeed), windDirection_(std::move(windDirection)),
-      visibility_(visibility), pressure_(pressure) {}
+    visibility_(visibility), pressure_(pressure) {}
 
 double Environment::GetWindSpeed() { return windSpeed_; }
 std::string Environment::GetWindDirection() { return windDirection_; }

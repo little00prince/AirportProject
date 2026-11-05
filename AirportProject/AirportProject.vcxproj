@@ -139,6 +139,7 @@
     <ClCompile Include="AirportConfiguration.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EnvironmentProxy.cpp" />
+    <ClCompile Include="GroundService.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Managers.cpp" />
   </ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="AirportConfiguration.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="EnvironmentProxy.h" />
+    <ClInclude Include="GroundService.h" />
     <ClInclude Include="Managers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

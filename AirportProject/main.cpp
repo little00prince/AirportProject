@@ -13,13 +13,15 @@ int main() {
         "Международный аэропорт", true, true, true
     };
 
-    auto realEnvironment = std::make_shared<Environment>(
-        6.5, "северо-западное", 8.0, 1013.2
+    std::shared_ptr<Environment> realEnvironment(
+        new Environment(6.5, "северо-западное", 8.0, 1013.2)
     );
 
     std::shared_ptr<IEnvironment> weather;
 
-    auto proxy = std::make_shared<EnvironmentProxy>(realEnvironment);
+    std::shared_ptr<EnvironmentProxy> proxy(
+        new EnvironmentProxy(realEnvironment)
+    );
 
     proxy->SetAccessAllowed(config.weatherAccessAllowed);
     proxy->SetCacheEnabled(config.cacheEnabled);
@@ -33,11 +35,15 @@ int main() {
         std::cout << "[Config] Используется прямой Environment\n\n";
     }
 
+    // Создаём наземную службу и передаём её в ServiceManager
+    GroundService groundService;
+    ServiceManager serviceManager(groundService);
+
     Airport airport(
         config.airportName,
         LandingManager{},
         GateManager{},
-        ServiceManager{},
+        serviceManager,
         weather
     );
 

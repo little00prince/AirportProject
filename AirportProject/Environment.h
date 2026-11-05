@@ -13,7 +13,7 @@ public:
 class Environment : public IEnvironment {
 public:
     Environment(double windSpeed, std::string windDirection,
-                double visibility, double pressure);
+        double visibility, double pressure);
     double GetWindSpeed() override;
     std::string GetWindDirection() override;
     double GetVisibility() override;

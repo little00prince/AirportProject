@@ -1,4 +1,3 @@
-
 #include "EnvironmentProxy.h"
 
 EnvironmentProxy::EnvironmentProxy(std::shared_ptr<Environment> environment)
