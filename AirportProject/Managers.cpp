@@ -1,26 +1,33 @@
-#include "Managers.h"
+﻿#include "Managers.h"
 #include <iostream>
 
 void LandingManager::ScheduleLanding(const Aircraft& aircraft) {
-    std::cout << "[LandingManager] Подобрана ВПП для рейса "
+    std::cout << "[Посадка] Назначена ВПП для рейса "
         << aircraft.GetFlightNumber()
         << " (категория: " << aircraft.GetCategory() << ")\n";
 }
 
 void GateManager::AssignGate(const Aircraft& aircraft) {
-    std::cout << "[GateManager] Назначен свободный гейт рейсу "
+    std::cout << "[Гейт] Свободный гейт назначен рейсу "
         << aircraft.GetFlightNumber() << "\n";
 }
 
-ServiceManager::ServiceManager() {
-}
+ServiceManager::ServiceManager() = default;
 
-ServiceManager::ServiceManager(GroundService groundService)
-    : groundService_(groundService) {
+ServiceManager::ServiceManager(std::shared_ptr<IService> service)
+    : service_(std::move(service)) {}
+
+void ServiceManager::SetService(std::shared_ptr<IService> service) {
+    service_ = std::move(service);
 }
 
 void ServiceManager::RequestServices(const Aircraft& aircraft) {
-    std::cout << "[ServiceManager] Запрошено наземное обслуживание рейса "
+    std::cout << "[Обслуживание] Запрошено наземное обслуживание рейса "
         << aircraft.GetFlightNumber() << "\n";
-    groundService_.ServeAircraft(aircraft);
+    if (service_) {
+        service_->Serve(aircraft);
+    }
+    else {
+        std::cout << "[Обслуживание] Пакет служб не настроен\n";
+    }
 }

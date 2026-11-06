@@ -142,6 +142,8 @@
     <ClCompile Include="GroundService.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Managers.cpp" />
+    <ClCompile Include="Services.cpp" />
+    <ClCompile Include="WeatherAdapter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.h" />
@@ -151,6 +153,8 @@
     <ClInclude Include="EnvironmentProxy.h" />
     <ClInclude Include="GroundService.h" />
     <ClInclude Include="Managers.h" />
+    <ClInclude Include="Services.h" />
+    <ClInclude Include="WeatherAdapter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

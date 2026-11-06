@@ -1,32 +1,32 @@
-#include "GroundService.h"
+﻿#include "GroundService.h"
 #include <iostream>
 
 void FuelService::Refuel(const Aircraft& aircraft) {
-    std::cout << "[FuelService] Refueling aircraft " << aircraft.GetFlightNumber()
+    std::cout << "[Заправка] Заправка воздушного судна " << aircraft.GetFlightNumber()
         << " (" << aircraft.GetType() << ")\n";
 }
 
 void BaggageService::UnloadBaggage(const Aircraft& aircraft) {
-    std::cout << "[BaggageService] Unloading baggage from flight " << aircraft.GetFlightNumber() << "\n";
+    std::cout << "[Багаж] Выгрузка багажа с рейса " << aircraft.GetFlightNumber() << "\n";
 }
 
 void BaggageService::LoadBaggage(const Aircraft& aircraft) {
-    std::cout << "[BaggageService] Loading baggage onto flight " << aircraft.GetFlightNumber() << "\n";
+    std::cout << "[Багаж] Погрузка багажа на рейс " << aircraft.GetFlightNumber() << "\n";
 }
 
 void CleaningService::CleanCabin(const Aircraft& aircraft) {
-    std::cout << "[CleaningService] Cleaning cabin of aircraft " << aircraft.GetFlightNumber() << "\n";
+    std::cout << "[Уборка] Уборка салона воздушного судна " << aircraft.GetFlightNumber() << "\n";
 }
 
 void CateringService::ReplenishSupplies(const Aircraft& aircraft) {
-    std::cout << "[CateringService] Replenishing onboard catering for flight " << aircraft.GetFlightNumber() << "\n";
+    std::cout << "[Питание] Пополнение бортового питания рейса " << aircraft.GetFlightNumber() << "\n";
 }
 
 GroundService::GroundService() {
 }
 
 void GroundService::ServeAircraft(const Aircraft& aircraft) {
-    std::cout << "[GroundService] Starting ground service for flight " << aircraft.GetFlightNumber() << "\n";
+    std::cout << "[НаземнаяСлужба] Начало обслуживания рейса " << aircraft.GetFlightNumber() << "\n";
 
     baggageService_.UnloadBaggage(aircraft);
     cleaningService_.CleanCabin(aircraft);
@@ -34,5 +34,5 @@ void GroundService::ServeAircraft(const Aircraft& aircraft) {
     cateringService_.ReplenishSupplies(aircraft);
     baggageService_.LoadBaggage(aircraft);
 
-    std::cout << "[GroundService] Ground service for flight " << aircraft.GetFlightNumber() << " completed\n";
+    std::cout << "[НаземнаяСлужба] Обслуживание рейса " << aircraft.GetFlightNumber() << " завершено\n";
 }

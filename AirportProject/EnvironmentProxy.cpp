@@ -1,3 +1,4 @@
+﻿
 #include "EnvironmentProxy.h"
 
 EnvironmentProxy::EnvironmentProxy(std::shared_ptr<Environment> environment)
@@ -16,7 +17,7 @@ EnvironmentProxy::EnvironmentProxy(std::shared_ptr<Environment> environment)
 
 void EnvironmentProxy::CheckAccess() {
     if (!accessAllowed) {
-        throw std::runtime_error("Access denied");
+        throw std::runtime_error("Доступ запрещён");
     }
 }
 
@@ -38,10 +39,10 @@ double EnvironmentProxy::GetWindSpeed() {
     if (!windCached) {
         windCache_ = realEnvironment->GetWindSpeed();
         windCached = true;
-        std::cout << "[Proxy] Wind speed loaded into cache\n";
+        std::cout << "[Proxy] Скорость ветра загружена в кэш\n";
     }
     else {
-        std::cout << "[Proxy] Wind speed received from cache\n";
+        std::cout << "[Proxy] Скорость ветра получена из кэша\n";
     }
 
     return windCache_;
