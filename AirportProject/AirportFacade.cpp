@@ -11,6 +11,8 @@ AirportFacade::AirportFacade(AirportConfiguration config)
     // По умолчанию обычные объявления в консоль
     std::shared_ptr<IAnnouncementImplementor> impl(new ConsoleAnnouncementImplementor());
     announcement_ = std::shared_ptr<Announcement>(new DetailedAnnouncement(impl));
+    // Object Pool: общий пул гейтов на все прибытия через этот фасад
+    gatePool_ = std::shared_ptr<GatePool>(new GatePool(2));
 }
 
 std::shared_ptr<IEnvironment> AirportFacade::BuildWeather(bool forceAdapter) const {
@@ -112,14 +114,32 @@ void AirportFacade::ProcessArrival(const Aircraft& aircraft) {
     std::shared_ptr<IService> package = BuildPackageFromExpert(aircraft, config_);
     ServiceManager serviceManager(package);
 
+    GateManager gateManager(gatePool_);
     Airport airport(
         config_.airportName,
         LandingManager{},
-        GateManager{},
+        gateManager,
         serviceManager,
         weather
     );
     airport.HandleArrival(aircraft);
 
     std::cout << "[AirportFacade] ProcessArrival завершён\n";
+}
+
+void AirportFacade::DemonstrateNoFreeGates() {
+    std::cout << "[AirportFacade] Демо Object Pool: занимаем все гейты\n";
+    std::shared_ptr<Gate> held1 = gatePool_->Acquire("HOLD-1");
+    std::shared_ptr<Gate> held2 = gatePool_->Acquire("HOLD-2");
+
+    std::cout << "[AirportFacade] Пытаемся выдать гейт ещё одному рейсу...\n";
+    std::shared_ptr<Gate> overflow = gatePool_->Acquire("OVERFLOW-99");
+    if (!overflow) {
+        std::cout << "[AirportFacade] Ожидаемо: свободных гейтов нет "
+            "(пул исчерпан)\n";
+    }
+
+    std::cout << "[AirportFacade] Освобождаем занятые для демо гейты\n";
+    gatePool_->Release(held1);
+    gatePool_->Release(held2);
 }

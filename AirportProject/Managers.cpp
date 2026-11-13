@@ -7,9 +7,33 @@ void LandingManager::ScheduleLanding(const Aircraft& aircraft) {
         << " (категория: " << aircraft.GetCategory() << ")\n";
 }
 
+GateManager::GateManager()
+    : pool_(), currentGate_() {}
+
+GateManager::GateManager(std::shared_ptr<GatePool> pool)
+    : pool_(std::move(pool)), currentGate_() {}
+
 void GateManager::AssignGate(const Aircraft& aircraft) {
-    std::cout << "[GateManager] Назначен свободный гейт рейсу "
-        << aircraft.GetFlightNumber() << "\n";
+    if (!pool_) {
+        std::cout << "[GateManager] Пул гейтов не задан, назначение пропущено\n";
+        return;
+    }
+    currentGate_ = pool_->Acquire(aircraft.GetFlightNumber());
+    if (currentGate_) {
+        std::cout << "[GateManager] Рейсу " << aircraft.GetFlightNumber()
+            << " назначен гейт " << currentGate_->Number() << "\n";
+    }
+    else {
+        std::cout << "[GateManager] Не удалось назначить гейт рейсу "
+            << aircraft.GetFlightNumber() << "\n";
+    }
+}
+
+void GateManager::ReleaseAssignedGate() {
+    if (pool_ && currentGate_) {
+        pool_->Release(currentGate_);
+        currentGate_ = std::shared_ptr<Gate>();
+    }
 }
 
 ServiceManager::ServiceManager() = default;

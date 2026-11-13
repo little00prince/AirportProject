@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
+    <ClCompile Include="AircraftFactory.cpp" />
     <ClCompile Include="AircraftType.cpp" />
     <ClCompile Include="AirportFacade.cpp" />
     <ClCompile Include="Airport.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="Announcement.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EnvironmentProxy.cpp" />
+    <ClCompile Include="GatePool.cpp" />
     <ClCompile Include="GroundService.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Managers.cpp" />
@@ -150,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.h" />
+    <ClInclude Include="AircraftFactory.h" />
     <ClInclude Include="AircraftType.h" />
     <ClInclude Include="AirportFacade.h" />
     <ClInclude Include="Airport.h" />
@@ -157,6 +160,7 @@
     <ClInclude Include="Announcement.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="EnvironmentProxy.h" />
+    <ClInclude Include="GatePool.h" />
     <ClInclude Include="GroundService.h" />
     <ClInclude Include="Managers.h" />
     <ClInclude Include="Services.h" />

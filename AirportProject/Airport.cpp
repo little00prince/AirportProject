@@ -19,5 +19,7 @@ void Airport::HandleArrival(const Aircraft& aircraft) {
     landingManager_.ScheduleLanding(aircraft);
     gateManager_.AssignGate(aircraft);
     serviceManager_.RequestServices(aircraft);
+    // Object Pool: после обслуживания гейт возвращается в пул
+    gateManager_.ReleaseAssignedGate();
     std::cout << "[Airport] Обработка прибытия завершена\n";
 }

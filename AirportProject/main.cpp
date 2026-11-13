@@ -2,6 +2,7 @@
 #include "AirportConfiguration.h"
 #include "Aircraft.h"
 #include "AircraftType.h"
+#include "AircraftFactory.h"
 #include <iostream>
 #include <memory>
 #include <windows.h>
@@ -21,40 +22,46 @@ int main() {
     config.usePriority = true;
 
     std::cout << "========================================\n";
-    std::cout << "  Facade + Flyweight + Bridge + Information Expert\n";
+    std::cout << "  Factory Method + Object Pool (+ прежние паттерны)\n";
     std::cout << "========================================\n\n";
 
-    // Facade скрывает сборку Airport / managers / weather / package
     AirportFacade facade(config);
 
-    // ---------- Flyweight: несколько рейсов одного типа делят AircraftType ----------
+    // ---------- Factory Method: создаём борта через создателей ----------
     std::cout << "----------------------------------------\n";
-    std::cout << "  ПАТТЕРН: Flyweight\n";
+    std::cout << "  ПАТТЕРН: Factory Method\n";
     std::cout << "----------------------------------------\n";
-    PassengerLiner flight1("SU-123");
-    PassengerLiner flight2("SU-456");  // тот же тип — повторное использование из пула
-    EmergencyAircraft emergency1("MED-01");
-    EmergencyAircraft emergency2("MED-02"); // тот же аварийный тип из пула
-    std::cout << "[AircraftTypeFactory] Размер пула: "
-        << AircraftTypeFactory::PoolSize() << " (ожидается 2 типа)\n\n";
+    PassengerAircraftCreator passengerCreator;
+    EmergencyAircraftCreator emergencyCreator;
 
-    // ---------- Information Expert + Facade + Bridge + Proxy ----------
-    std::cout << "----------------------------------------\n";
-    std::cout << "  Пассажирский рейс (Information Expert + Facade + Bridge + Proxy)\n";
-    std::cout << "----------------------------------------\n";
-    facade.ProcessArrival(flight1);
+    std::shared_ptr<Aircraft> flight1 = passengerCreator.RegisterFlight("SU-123");
+    std::shared_ptr<Aircraft> flight2 = passengerCreator.RegisterFlight("SU-456");
+    std::shared_ptr<Aircraft> emergency1 = emergencyCreator.RegisterFlight("MED-01");
+    std::shared_ptr<Aircraft> emergency2 = emergencyCreator.RegisterFlight("MED-02");
 
-    // ---------- Аварийный: другой Bridge implementor + Adapter + другой набор служб ----------
+    std::cout << "[AircraftTypeFactory] Размер пула типов (Flyweight): "
+        << AircraftTypeFactory::PoolSize() << "\n\n";
+
+    // ---------- Прибытия: Object Pool гейтов внутри Facade/GateManager ----------
+    std::cout << "----------------------------------------\n";
+    std::cout << "  Пассажирский рейс (Object Pool: Acquire/Release гейта)\n";
+    std::cout << "----------------------------------------\n";
+    facade.ProcessArrival(*flight1);
+
     std::cout << "\n----------------------------------------\n";
-    std::cout << "  Аварийный рейс (Information Expert + Adapter + Priority Bridge)\n";
+    std::cout << "  Аварийный рейс\n";
     std::cout << "----------------------------------------\n";
-    facade.ProcessArrival(emergency1);
+    facade.ProcessArrival(*emergency1);
 
-    // Ещё один пассажирский — Flyweight уже в пуле
     std::cout << "\n----------------------------------------\n";
-    std::cout << "  Второй пассажирский (Flyweight уже в пуле)\n";
+    std::cout << "  Второй пассажирский (гейты снова из пула)\n";
     std::cout << "----------------------------------------\n";
-    facade.ProcessArrival(flight2);
+    facade.ProcessArrival(*flight2);
+
+    std::cout << "\n----------------------------------------\n";
+    std::cout << "  Object Pool: нехватка гейтов\n";
+    std::cout << "----------------------------------------\n";
+    facade.DemonstrateNoFreeGates();
 
     std::cout << "\n=== Демонстрация завершена ===\n";
     return 0;
