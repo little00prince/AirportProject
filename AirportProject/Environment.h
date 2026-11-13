@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <string>
 
 class IEnvironment {
@@ -20,7 +20,7 @@ public:
     double GetPressure() override;
     bool IsNightTime() const;
 
-    // Новое: нужны для прокси, в базовом — пустышки
+    // пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     virtual void SetAccessAllowed(bool) {}
     virtual void SetCacheEnabled(bool) {}
 

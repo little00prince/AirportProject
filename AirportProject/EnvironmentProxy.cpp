@@ -17,7 +17,7 @@ EnvironmentProxy::EnvironmentProxy(std::shared_ptr<Environment> environment)
 
 void EnvironmentProxy::CheckAccess() {
     if (!accessAllowed_) {
-        std::cout << "[Proxy] ДОСТУП ЗАПРЕЩЁН — запрос к данным окружения отклонён\n";
+        std::cout << "[EnvironmentProxy] ДОСТУП ЗАПРЕЩЁН — запрос отклонён\n";
         throw std::runtime_error("Доступ запрещен");
     }
 }
@@ -25,20 +25,20 @@ void EnvironmentProxy::CheckAccess() {
 void EnvironmentProxy::SetAccessAllowed(bool allowed) {
     accessAllowed_ = allowed;
     if (allowed) {
-        std::cout << "[Proxy] Режим доступа: РАЗРЕШЁН\n";
+        std::cout << "[EnvironmentProxy] Режим доступа: РАЗРЕШЁН\n";
     }
     else {
-        std::cout << "[Proxy] Режим доступа: ЗАПРЕЩЁН\n";
+        std::cout << "[EnvironmentProxy] Режим доступа: ЗАПРЕЩЁН\n";
     }
 }
 
 void EnvironmentProxy::SetCacheEnabled(bool enabled) {
     cacheEnabled_ = enabled;
     if (enabled) {
-        std::cout << "[Proxy] Кэширование: ВКЛЮЧЕНО\n";
+        std::cout << "[EnvironmentProxy] Кэширование: ВКЛЮЧЕНО\n";
     }
     else {
-        std::cout << "[Proxy] Кэширование: ВЫКЛЮЧЕНО\n";
+        std::cout << "[EnvironmentProxy] Кэширование: ВЫКЛЮЧЕНО\n";
     }
 }
 
@@ -46,17 +46,17 @@ double EnvironmentProxy::GetWindSpeed() {
     CheckAccess();
 
     if (!cacheEnabled_) {
-        std::cout << "[Proxy] Скорость ветра ← реальный объект (кэш выкл.)\n";
+        std::cout << "[EnvironmentProxy] Скорость ветра ← реальный объект (кэш выкл.)\n";
         return realEnvironment_->GetWindSpeed();
     }
 
     if (!windCached_) {
         windCache_ = realEnvironment_->GetWindSpeed();
         windCached_ = true;
-        std::cout << "[Proxy] Скорость ветра ← реальный объект → сохранено в кэш\n";
+        std::cout << "[EnvironmentProxy] Скорость ветра ← реальный объект → в кэш\n";
     }
     else {
-        std::cout << "[Proxy] Скорость ветра ← кэш\n";
+        std::cout << "[EnvironmentProxy] Скорость ветра ← кэш\n";
     }
 
     return windCache_;
@@ -66,17 +66,17 @@ std::string EnvironmentProxy::GetWindDirection() {
     CheckAccess();
 
     if (!cacheEnabled_) {
-        std::cout << "[Proxy] Направление ветра ← реальный объект (кэш выкл.)\n";
+        std::cout << "[EnvironmentProxy] Направление ветра ← реальный объект (кэш выкл.)\n";
         return realEnvironment_->GetWindDirection();
     }
 
     if (!directionCached_) {
         directionCache_ = realEnvironment_->GetWindDirection();
         directionCached_ = true;
-        std::cout << "[Proxy] Направление ветра ← реальный объект → сохранено в кэш\n";
+        std::cout << "[EnvironmentProxy] Направление ветра ← реальный объект → в кэш\n";
     }
     else {
-        std::cout << "[Proxy] Направление ветра ← кэш\n";
+        std::cout << "[EnvironmentProxy] Направление ветра ← кэш\n";
     }
 
     return directionCache_;
@@ -86,17 +86,17 @@ double EnvironmentProxy::GetVisibility() {
     CheckAccess();
 
     if (!cacheEnabled_) {
-        std::cout << "[Proxy] Видимость ← реальный объект (кэш выкл.)\n";
+        std::cout << "[EnvironmentProxy] Видимость ← реальный объект (кэш выкл.)\n";
         return realEnvironment_->GetVisibility();
     }
 
     if (!visibilityCached_) {
         visibilityCache_ = realEnvironment_->GetVisibility();
         visibilityCached_ = true;
-        std::cout << "[Proxy] Видимость ← реальный объект → сохранено в кэш\n";
+        std::cout << "[EnvironmentProxy] Видимость ← реальный объект → в кэш\n";
     }
     else {
-        std::cout << "[Proxy] Видимость ← кэш\n";
+        std::cout << "[EnvironmentProxy] Видимость ← кэш\n";
     }
 
     return visibilityCache_;
@@ -106,17 +106,17 @@ double EnvironmentProxy::GetPressure() {
     CheckAccess();
 
     if (!cacheEnabled_) {
-        std::cout << "[Proxy] Давление ← реальный объект (кэш выкл.)\n";
+        std::cout << "[EnvironmentProxy] Давление ← реальный объект (кэш выкл.)\n";
         return realEnvironment_->GetPressure();
     }
 
     if (!pressureCached_) {
         pressureCache_ = realEnvironment_->GetPressure();
         pressureCached_ = true;
-        std::cout << "[Proxy] Давление ← реальный объект → сохранено в кэш\n";
+        std::cout << "[EnvironmentProxy] Давление ← реальный объект → в кэш\n";
     }
     else {
-        std::cout << "[Proxy] Давление ← кэш\n";
+        std::cout << "[EnvironmentProxy] Давление ← кэш\n";
     }
 
     return pressureCache_;

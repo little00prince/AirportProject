@@ -1,6 +1,7 @@
 #pragma once
 #include "Aircraft.h"
-#include "GroundService.h"
+#include "Services.h"
+#include <memory>
 
 class LandingManager {
 public:
@@ -15,9 +16,10 @@ public:
 class ServiceManager {
 public:
     ServiceManager();
-    explicit ServiceManager(GroundService groundService);
+    explicit ServiceManager(std::shared_ptr<IService> service);
     void RequestServices(const Aircraft& aircraft);
+    void SetService(std::shared_ptr<IService> service);
 
 private:
-    GroundService groundService_;
+    std::shared_ptr<IService> service_;
 };

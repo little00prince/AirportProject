@@ -11,5 +11,5 @@ PassengerLiner::PassengerLiner(const std::string& flightNumber)
 std::string PassengerLiner::GetCategory() const { return "пассажирский"; }
 
 EmergencyAircraft::EmergencyAircraft(const std::string& flightNumber)
-    : Aircraft(flightNumber, "аварийный борт") {}
-std::string EmergencyAircraft::GetCategory() const { return "экстренный"; }
+    : Aircraft(flightNumber, "аварийное воздушное судно") {}
+std::string EmergencyAircraft::GetCategory() const { return "аварийный"; }
