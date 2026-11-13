@@ -1,11 +1,10 @@
-#include "Airport.h"
+﻿#include "Airport.h"
 #include "AirportConfiguration.h"
 #include <iostream>
 #include <memory>
 #include <windows.h>
 
 int main() {
-    // Включаем UTF-8 для русских сообщений в консоли
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 
@@ -17,56 +16,71 @@ int main() {
         new Environment(6.5, "северо-западное", 8.0, 1013.2)
     );
 
-    std::shared_ptr<IEnvironment> weather;
-
-    std::shared_ptr<EnvironmentProxy> proxy(
+    // Прокси того же типа, что и проксируемый объект (Environment)
+    std::shared_ptr<Environment> proxy(
         new EnvironmentProxy(realEnvironment)
     );
 
+    std::cout << "=== Настройка прокси ===\n";
     proxy->SetAccessAllowed(config.weatherAccessAllowed);
     proxy->SetCacheEnabled(config.cacheEnabled);
+    std::cout << "\n";
 
-    if (config.useProxy) {
-        weather = proxy;
-        std::cout << "[Config] Используется EnvironmentProxy, кэш включен\n\n";
-    }
-    else {
-        weather = realEnvironment;
-        std::cout << "[Config] Используется прямой Environment\n\n";
-    }
+    // --- Аэропорт 1: полный пакет ---
+    ServicePackage fullPackage;
+    GroundService fullGroundService(fullPackage);
+    ServiceManager fullServiceManager(fullGroundService);
 
-    // Создаём наземную службу и передаём её в ServiceManager
-    GroundService groundService;
-    ServiceManager serviceManager(groundService);
-
-    Airport airport(
-        config.airportName,
+    Airport fullAirport(
+        "Аэропорт-Полный",
         LandingManager{},
         GateManager{},
-        serviceManager,
-        weather
+        fullServiceManager,
+        proxy
     );
 
-    PassengerLiner flight("SU-123");
-    airport.HandleArrival(flight);
+    // --- Аэропорт 2: без питания ---
+    ServicePackage noCateringPackage;
+    noCateringPackage.catering = false;
+    GroundService lightGroundService(noCateringPackage);
+    ServiceManager lightServiceManager(lightGroundService);
 
-    std::cout << "\n[Demo] Повторный запрос скорости ветра:\n";
-    std::cout << "Скорость ветра: "
-        << weather->GetWindSpeed() << " м/с\n";
+    Airport lightAirport(
+        "Аэропорт-БезПитания",
+        LandingManager{},
+        GateManager{},
+        lightServiceManager,
+        proxy
+    );
 
-    std::cout << "\n[Demo] Проверка ограничения доступа:\n";
+    std::cout << "=== Рейс в аэропорту с полным пакетом ===\n";
+    PassengerLiner flight1("SU-123");
+    fullAirport.HandleArrival(flight1);
 
+    std::cout << "\n=== Рейс в аэропорту без питания ===\n";
+    PassengerLiner flight2("SU-456");
+    lightAirport.HandleArrival(flight2);
+
+    std::cout << "\n=== Демонстрация кэша ===\n";
+    std::cout << "Повторный запрос скорости ветра:\n";
+    std::cout << "Скорость ветра: " << proxy->GetWindSpeed() << " м/с\n";
+
+    std::cout << "\n=== Демонстрация блокировки доступа ===\n";
     proxy->SetAccessAllowed(false);
-
     try {
+        std::cout << "Попытка получить видимость при запрещённом доступе...\n";
         proxy->GetVisibility();
     }
     catch (const std::exception& ex) {
-        std::cout << "[Proxy] " << ex.what() << "\n";
+        std::cout << "[Proxy] Исключение: " << ex.what() << "\n";
     }
 
-    EmergencyAircraft emergency("MED-01");
+    std::cout << "\n=== Восстановление доступа ===\n";
+    proxy->SetAccessAllowed(true);
+    std::cout << "Видимость после восстановления: "
+        << proxy->GetVisibility() << " км\n";
 
+    EmergencyAircraft emergency("MED-01");
     std::cout << "\n[Demo] Экстренный борт, категория: "
         << emergency.GetCategory() << "\n";
 

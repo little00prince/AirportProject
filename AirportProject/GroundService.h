@@ -22,9 +22,19 @@ public:
     void ReplenishSupplies(const Aircraft& aircraft);
 };
 
+// Набор услуг, которые выполняет наземная служба
+struct ServicePackage {
+    bool fuel = true;
+    bool baggage = true;
+    bool cleaning = true;
+    bool catering = true;
+};
+
 class GroundService {
 public:
-    GroundService();
+    GroundService() = default;
+    explicit GroundService(ServicePackage package) : package_(package) {}
+
     void ServeAircraft(const Aircraft& aircraft);
 
 private:
@@ -32,4 +42,5 @@ private:
     BaggageService baggageService_;
     CleaningService cleaningService_;
     CateringService cateringService_;
+    ServicePackage package_;
 };

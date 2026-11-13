@@ -19,6 +19,11 @@ public:
     double GetVisibility() override;
     double GetPressure() override;
     bool IsNightTime() const;
+
+    // Новое: нужны для прокси, в базовом — пустышки
+    virtual void SetAccessAllowed(bool) {}
+    virtual void SetCacheEnabled(bool) {}
+
 private:
     double windSpeed_;
     std::string windDirection_;
