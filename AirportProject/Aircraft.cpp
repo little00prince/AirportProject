@@ -1,15 +1,45 @@
 #include "Aircraft.h"
+#include <iostream>
 
-Aircraft::Aircraft(std::string flightNumber, std::string type)
-    : flightNumber_(std::move(flightNumber)), type_(std::move(type)) {}
+Aircraft::Aircraft(std::string flightNumber, std::shared_ptr<AircraftType> type)
+    : flightNumber_(std::move(flightNumber)), aircraftType_(std::move(type)) {}
 
-const std::string& Aircraft::GetFlightNumber() const { return flightNumber_; }
-const std::string& Aircraft::GetType() const { return type_; }
+const std::string& Aircraft::GetFlightNumber() const {
+    return flightNumber_;
+}
+
+const std::string& Aircraft::GetType() const {
+    return aircraftType_->GetTypeName();
+}
+
+std::string Aircraft::GetCategory() const {
+    return aircraftType_->GetCategory();
+}
+
+bool Aircraft::NeedsBaggage() const { return true; }
+bool Aircraft::NeedsCleaning() const { return true; }
+bool Aircraft::NeedsFuel() const { return true; }
+bool Aircraft::NeedsCatering() const { return true; }
+bool Aircraft::NeedsMedical() const { return false; }
+
+std::shared_ptr<AircraftType> Aircraft::GetAircraftType() const {
+    return aircraftType_;
+}
 
 PassengerLiner::PassengerLiner(const std::string& flightNumber)
-    : Aircraft(flightNumber, "пассажирский лайнер") {}
-std::string PassengerLiner::GetCategory() const { return "пассажирский"; }
+    : Aircraft(
+        flightNumber,
+        AircraftTypeFactory::GetType("пассажирский лайнер", "пассажирский"))
+{
+}
 
 EmergencyAircraft::EmergencyAircraft(const std::string& flightNumber)
-    : Aircraft(flightNumber, "аварийное воздушное судно") {}
-std::string EmergencyAircraft::GetCategory() const { return "аварийный"; }
+    : Aircraft(
+        flightNumber,
+        AircraftTypeFactory::GetType("аварийное воздушное судно", "аварийный"))
+{
+}
+
+bool EmergencyAircraft::NeedsBaggage() const { return false; }
+bool EmergencyAircraft::NeedsCatering() const { return false; }
+bool EmergencyAircraft::NeedsMedical() const { return true; }

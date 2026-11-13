@@ -20,7 +20,6 @@ public:
     double GetPressure() override;
     bool IsNightTime() const;
 
-    // �����: ����� ��� ������, � ������� � ��������
     virtual void SetAccessAllowed(bool) {}
     virtual void SetCacheEnabled(bool) {}
 
