@@ -3,6 +3,7 @@
 #include "Services.h"
 #include "WeatherAdapter.h"
 #include "EnvironmentProxy.h"
+#include "FlightLifecycle.h"
 #include <iostream>
 
 AirportFacade::AirportFacade(AirportConfiguration config)
@@ -93,6 +94,16 @@ static std::shared_ptr<IService> BuildPackageFromExpert(
 
 void AirportFacade::ProcessArrival(const Aircraft& aircraft) {
     std::cout << "[AirportFacade] ProcessArrival: упрощённый вход в подсистему\n";
+
+    // State + Observer: жизненный цикл рейса и уведомления наблюдателей
+    {
+        FlightLifecycle lifecycle(aircraft);
+        lifecycle.Attach(std::shared_ptr<IFlightObserver>(new ConsoleBoardObserver()));
+        lifecycle.Attach(std::shared_ptr<IFlightObserver>(new GroundOpsObserver()));
+        lifecycle.RunToCompletion();
+        std::cout << "[AirportFacade] Жизненный цикл: "
+            << lifecycle.CurrentStateName() << "\n";
+    }
 
     // Bridge: для аварийных — другая реализация объявлений
     if (aircraft.GetCategory() == "аварийный") {

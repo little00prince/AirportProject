@@ -22,7 +22,7 @@ int main() {
     config.usePriority = true;
 
     std::cout << "========================================\n";
-    std::cout << "  Factory Method + Object Pool (+ прежние паттерны)\n";
+    std::cout << "  State + Observer (+ Factory Method, Object Pool, ...)\n";
     std::cout << "========================================\n\n";
 
     AirportFacade facade(config);
@@ -44,7 +44,7 @@ int main() {
 
     // ---------- Прибытия: Object Pool гейтов внутри Facade/GateManager ----------
     std::cout << "----------------------------------------\n";
-    std::cout << "  Пассажирский рейс (Object Pool: Acquire/Release гейта)\n";
+    std::cout << "  Пассажирский рейс (State + Observer + Object Pool)\n";
     std::cout << "----------------------------------------\n";
     facade.ProcessArrival(*flight1);
 
